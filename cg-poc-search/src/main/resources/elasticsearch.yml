@@ -1,0 +1,3 @@
+cluster.name: finner-elasticsearch
+node.name: "windows-d"
+path.data: ../../elasticsearch-local-data
