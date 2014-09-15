@@ -1,0 +1,83 @@
+# taken from https://www.youtube.com/watch?v=qG3N2rMOeBE
+
+
+# POST an index to Elasticsearch
+curl -XPOST http://localhost:9200/contacts/people -d '{
+    "name": "Mark Story",
+    "email": "mark@m-story.com",
+    "twitter": "@mark_story",
+    "country": "Canada",
+    "tags": ["cakephp", "cakefest", "canada"]
+
+}'
+
+curl -XPOST http://localhost:9200/contacts/people -d '{
+    "name": "Graham Weldon",
+    "email": "graham@weldon.com",
+    "twitter": "@predominant",
+    "country": "Australia",
+    "tags": ["cakephp", "cakefest", "australia", "python"]
+
+}'
+
+
+curl -XPOST http://localhost:9200/contacts/people -d '{
+    "name": "Mark Story",
+    "email": "mark@m-story.com",
+    "twitter": "@mark_story",
+    "country": "Canada",
+    "tags": ["cakephp", "cakefest", "canada"]
+
+}'
+
+
+curl -XPOST http://localhost:9200/contacts/people -d '{
+    "name": "Mark Story",
+    "email": "mark@m-story.com",
+    "twitter": "@mark_story",
+    "country": "Canada",
+    "tags": ["cakephp", "cakefest", "canada"]
+
+}'
+
+
+# contacts => index is like schema RDBS
+# people => type is like table in RDBS
+
+
+# GET an index   (replace $id with real ID )
+curl -XGET http://localhost:9200/contacts/people/$id?pretty=true
+
+
+
+
+# DELETE an index  (replace $id with real ID )
+curl -XDELETE http://localhost:9200/contacts/people/$id?pretty=true
+
+# Simple Search
+curl -XGET http://localhost:9200/contacts/people/_search?q=Mark&pretty=true
+
+
+# Queries
+curl -XGET http://localhost:9200/contacts/people/_search?pretty=true -d '{
+  "query": {
+    "query_string": {
+       "query": "mark or weldon"
+    }
+  }
+}'
+
+# highlighting
+curl -XGET http://localhost:9200/contacts/people/_search?pretty=true -d '{
+  "query": {
+    "match": {
+      "email": "mark"
+    }
+  },
+  "highlight": {
+    "fields": {
+      "email": {},
+      "name": {}
+    }
+  }
+}'
