@@ -12,6 +12,10 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.elasticsearch.node.NodeBuilder.*;
 
 public class ElasticsearchConnection {
@@ -25,7 +29,7 @@ public class ElasticsearchConnection {
         conn.createClient();
         conn.createSettings();
         conn.doGet(conn.getClusterName());
-        conn.putIndexAsJSON();
+        conn.putIndex();
         conn.closeClient();
     }
 
@@ -48,15 +52,31 @@ public class ElasticsearchConnection {
     }
 
 
-    public void putIndexAsJSON() {
-        String json = "{" +
-            "\"user\":\"kimchy\"," +
-            "\"postDate\":\"2013-01-30\"," +
-            "\"message\":\"trying out Elasticsearch\"" +
-            "}";
+    public void putIndex() {
+        addIndex(createJSONDocument(), "twitter", "tweet");
+        //addIndex(createMapDocument(), "twitter", "tweet");
+    }
 
-        IndexResponse response = client.prepareIndex("twitter", "tweet")
-                .setSource(json)
+
+    public String createJSONDocument() {
+        return "{" +
+                "\"user\":\"kimchy\"," +
+                "\"postDate\":\"2013-01-30\"," +
+                "\"message\":\"trying out Elasticsearch\"" +
+                "}";
+    }
+
+    public Map<String, Object> createMapDocument() {
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("user","kimchy");
+        jsonMap.put("postDate",new Date());
+        jsonMap.put("message","trying out Elasticsearch");
+        return jsonMap;
+    }
+
+    public void addIndex(Object document, String indexName, String typeName) {
+        IndexResponse response = client.prepareIndex(indexName, typeName)
+                .setSource(document)
                 .execute()
                 .actionGet();
 
@@ -70,7 +90,10 @@ public class ElasticsearchConnection {
         long version = response.getVersion();
 
         System.out.println("Index: " + index + "\n" + "Type: " + type + "\n" + "ID: " + id + "\n" + "Version: " + version);
+
+
     }
+
 
 
     public void closeClient() {
