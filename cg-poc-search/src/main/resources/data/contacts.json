@@ -88,3 +88,18 @@ curl -XGET http://localhost:9200/contacts/people/_search?pretty=true -d '{
     }
   }
 }'
+
+
+# create a mapping. This is like defining a schema in a database.
+# CREATE THE MAPPING BEFORE INDEXING OTHERWISE Elasticsearch DELETS THE INDEXES
+ curl -XPUT http://localhost:9200/contacts/people/_mapping -d '{
+    "people": {
+        "properties": {
+            "name": {"type": "string"},
+            "email": {"type": "string"},
+            "twitter": {"type": "string"},
+            "country": {"type": "string"},
+            "tags": {"type": "string"}
+        }
+    }
+ }'

@@ -12,11 +12,14 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.elasticsearch.node.NodeBuilder.*;
+import static org.elasticsearch.common.xcontent.XContentFactory.*;
+
 
 public class ElasticsearchConnection {
 
@@ -29,7 +32,11 @@ public class ElasticsearchConnection {
         conn.createClient();
         conn.createSettings();
         conn.doGet(conn.getClusterName());
-        conn.putIndex();
+        try {
+            conn.putIndex();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         conn.closeClient();
     }
 
@@ -52,9 +59,11 @@ public class ElasticsearchConnection {
     }
 
 
-    public void putIndex() {
-        addIndex(createJSONDocument(), "twitter", "tweet");
-        //addIndex(createMapDocument(), "twitter", "tweet");
+    public void putIndex() throws IOException {
+
+        String source = createJSONDocument();
+        //addDocument(source, "twitter", "tweet");
+        addDocumentWithJsonBuilder(createMapDocument(), "twitter", "tweet", "1");
     }
 
 
@@ -74,12 +83,38 @@ public class ElasticsearchConnection {
         return jsonMap;
     }
 
-    public void addIndex(Object document, String indexName, String typeName) {
+    public void addDocumentAsJSON(Object document, String indexName, String typeName) {
         IndexResponse response = client.prepareIndex(indexName, typeName)
                 .setSource(document)
                 .execute()
                 .actionGet();
+        printResponse(response);
 
+
+    }
+
+
+    public void addDocumentWithJsonBuilder(Object document, String indexName, String typeName, String version) throws IOException {
+        IndexResponse response = client.prepareIndex(indexName, typeName, version)
+                .setSource(jsonBuilder().
+                                startObject()
+                                    .field("user", "kimchy")
+                                    .field("postDate", new Date())
+                                    .field("message","trying out elasticsearch")
+                                .endObject()
+                )
+                .execute()
+                .actionGet();
+        printResponse(response);
+
+
+    }
+
+
+
+
+
+    public void printResponse(IndexResponse response) {
         // Index name
         String index = response.getIndex();
         // Type name
@@ -90,10 +125,7 @@ public class ElasticsearchConnection {
         long version = response.getVersion();
 
         System.out.println("Index: " + index + "\n" + "Type: " + type + "\n" + "ID: " + id + "\n" + "Version: " + version);
-
-
     }
-
 
 
     public void closeClient() {
