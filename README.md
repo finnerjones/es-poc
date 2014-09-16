@@ -18,4 +18,4 @@ git push -u es-poc --all
 
 grab changes from remote
 
-git fetch es-poc
+git pull es-poc
