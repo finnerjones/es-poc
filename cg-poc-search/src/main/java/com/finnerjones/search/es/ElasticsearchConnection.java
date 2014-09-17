@@ -62,7 +62,7 @@ public class ElasticsearchConnection {
     public void putIndex() throws IOException {
 
         String source = createJSONDocument();
-        //addDocument(source, "twitter", "tweet");
+        addDocumentAsJSON(source, "twitter", "tweet", 1L);
         addDocumentWithJsonBuilder(createMapDocument(), "twitter", "tweet", "1");
     }
 
@@ -83,8 +83,8 @@ public class ElasticsearchConnection {
         return jsonMap;
     }
 
-    public void addDocumentAsJSON(Object document, String indexName, String typeName) {
-        IndexResponse response = client.prepareIndex(indexName, typeName)
+    public void addDocumentAsJSON(String document, String indexName, String typeName, Long id) {
+        IndexResponse response = client.prepareIndex(indexName, typeName, id.toString())
                 .setSource(document)
                 .execute()
                 .actionGet();
