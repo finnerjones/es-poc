@@ -14,24 +14,23 @@
 
     <groupId>com.thomsonreuters.poc.search.es</groupId>
     <artifactId>cg-poc-json-transformation</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${parent.version}</version>
 
 
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20140107</version>
         </dependency>
         <dependency>
             <groupId>com.thomsonreuters.poc.search.es</groupId>
             <artifactId>cg-poc-search</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.thomsonreuters.poc.search.es</groupId>
             <artifactId>cg-poc-indexer</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
 
     </dependencies>

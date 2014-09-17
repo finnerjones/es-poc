@@ -13,7 +13,7 @@
 
     <groupId>com.thomsonreuters.poc.search.es</groupId>
     <artifactId>cg-poc-indexer</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${parent.version}</version>
 
 
 </project>

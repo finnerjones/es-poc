@@ -1,7 +1,6 @@
 package com.finnerjones.transformation.xml.json;
 
 import com.finnerjones.search.es.ElasticsearchConnection;
-import org.elasticsearch.client.Client;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -16,7 +15,7 @@ public class XMLToJSON {
     //private static final String DATA_PATH = "D:\\ClinicalGenomics\\test-data\\cortellis-fast\\si";
     private static final String DATA_PATH = "cg-poc-json-transformation\\target\\classes\\contacts";
     private static final String INDEX_NAME = "contacts";
-    private static File dataFolder = new File (DATA_PATH);
+    private static File dataFolder = new File(DATA_PATH);
     private static ElasticsearchConnection esConn;
 
 
@@ -33,26 +32,24 @@ public class XMLToJSON {
     }
 
 
-
     public void convertXMLFileToJSON(String fullFilename) {
-        try  {
+        try {
             InputStream inNull = this.getClass().getClassLoader().getResourceAsStream(fullFilename);
             InputStream in = new FileInputStream(new File(fullFilename));
 
-            StringBuilder builder =  new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             int ptr = 0;
-            while ((ptr = in.read()) != -1 )
-                {
-                    builder.append((char) ptr);
-                }
+            while ((ptr = in.read()) != -1) {
+                builder.append((char) ptr);
+            }
 
-            String xml  = builder.toString();
+            String xml = builder.toString();
             JSONObject jsonObj = XML.toJSONObject(xml);
             Iterator keyIter = jsonObj.keys();
             String type = null;
             while (keyIter.hasNext()) {
                 if (type == null) {
-                    type = (String)keyIter.next();
+                    type = (String) keyIter.next();
                 }
             }
 
@@ -63,16 +60,14 @@ public class XMLToJSON {
             esConn.createClient();
             esConn.addDocumentAsJSON(jsonObj.toString(), INDEX_NAME, type, id);
 
-         }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
     public void findDataFiles(File fileOrFolder) {
-        for (File aFile: fileOrFolder.listFiles()) {
+        for (File aFile : fileOrFolder.listFiles()) {
             if (aFile.isDirectory()) {
                 findDataFiles(aFile);
             } else {
@@ -81,7 +76,6 @@ public class XMLToJSON {
         }
 
     }
-
 
 
     public void writeToDisk(byte[] data, String filename) throws IOException {

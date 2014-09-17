@@ -17,8 +17,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.elasticsearch.node.NodeBuilder.*;
-import static org.elasticsearch.common.xcontent.XContentFactory.*;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
 
 public class ElasticsearchConnection {
@@ -68,9 +68,9 @@ public class ElasticsearchConnection {
 
     public Map<String, Object> createMapDocument() {
         Map<String, Object> jsonMap = new HashMap<String, Object>();
-        jsonMap.put("user","kimchy");
-        jsonMap.put("postDate",new Date());
-        jsonMap.put("message","trying out Elasticsearch");
+        jsonMap.put("user", "kimchy");
+        jsonMap.put("postDate", new Date());
+        jsonMap.put("message", "trying out Elasticsearch");
         return jsonMap;
     }
 
@@ -89,9 +89,9 @@ public class ElasticsearchConnection {
         IndexResponse response = client.prepareIndex(indexName, typeName, version)
                 .setSource(jsonBuilder().
                                 startObject()
-                                    .field("user", "kimchy")
-                                    .field("postDate", new Date())
-                                    .field("message","trying out elasticsearch")
+                                .field("user", "kimchy")
+                                .field("postDate", new Date())
+                                .field("message", "trying out elasticsearch")
                                 .endObject()
                 )
                 .execute()
@@ -100,9 +100,6 @@ public class ElasticsearchConnection {
 
 
     }
-
-
-
 
 
     public void printResponse(IndexResponse response) {
