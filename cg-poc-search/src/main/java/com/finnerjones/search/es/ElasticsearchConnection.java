@@ -50,38 +50,12 @@ public class ElasticsearchConnection {
     }
 
 
-    public void putIndex() throws IOException {
-
-        String source = createJSONDocument();
-        addDocumentAsJSON(source, "twitter", "tweet", 1L);
-        addDocumentWithJsonBuilder(createMapDocument(), "twitter", "tweet", "1");
-    }
-
-
-    public String createJSONDocument() {
-        return "{" +
-                "\"user\":\"kimchy\"," +
-                "\"postDate\":\"2013-01-30\"," +
-                "\"message\":\"trying out Elasticsearch\"" +
-                "}";
-    }
-
-    public Map<String, Object> createMapDocument() {
-        Map<String, Object> jsonMap = new HashMap<String, Object>();
-        jsonMap.put("user", "kimchy");
-        jsonMap.put("postDate", new Date());
-        jsonMap.put("message", "trying out Elasticsearch");
-        return jsonMap;
-    }
-
     public void addDocumentAsJSON(String document, String indexName, String typeName, Long id) {
         IndexResponse response = client.prepareIndex(indexName, typeName, id.toString())
                 .setSource(document)
                 .execute()
                 .actionGet();
         printResponse(response);
-
-
     }
 
 
@@ -97,12 +71,10 @@ public class ElasticsearchConnection {
                 .execute()
                 .actionGet();
         printResponse(response);
-
-
     }
 
 
-    public void printResponse(IndexResponse response) {
+    private void printResponse(IndexResponse response) {
         // Index name
         String index = response.getIndex();
         // Type name
