@@ -5,9 +5,7 @@ import org.elasticsearch.client.Client;
 import org.json.JSONObject;
 import org.json.XML;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Iterator;
 
 /**
@@ -23,10 +21,17 @@ public class XMLToJSON {
 
 
     public static void main(String[] args) {
+        XMLToJSON xmlToJson = new XMLToJSON();
+        xmlToJson.process();
+    }
+
+
+    public void process() {
         esConn = new ElasticsearchConnection();
         XMLToJSON xmltojson = new XMLToJSON();
         xmltojson.findDataFiles(dataFolder);
     }
+
 
 
     public void convertXMLFileToJSON(String fullFilename) {
@@ -50,10 +55,11 @@ public class XMLToJSON {
                     type = (String)keyIter.next();
                 }
             }
-            System.out.println("type :" + type);
-            System.out.println(jsonObj);
 
             Long id = jsonObj.getJSONObject(type).getLong("id");
+
+            writeToDisk(jsonObj.toString().getBytes(), "");
+
             esConn.createClient();
             esConn.addDocumentAsJSON(jsonObj.toString(), INDEX_NAME, type, id);
 
@@ -74,5 +80,13 @@ public class XMLToJSON {
             }
         }
 
+    }
+
+
+
+    public void writeToDisk(byte[] data, String filename) throws IOException {
+        FileOutputStream out = new FileOutputStream("the-file-name");
+        out.write(data);
+        out.close();
     }
 }

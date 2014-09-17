@@ -40,6 +40,10 @@ public class ElasticsearchConnection {
         conn.closeClient();
     }
 
+    public ElasticsearchConnection() {
+
+    }
+
     public void createClient() {
         Node node = nodeBuilder().node();
         client = node.client();

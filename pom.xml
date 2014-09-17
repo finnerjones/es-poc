@@ -4,14 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>groupId</groupId>
+    <groupId>com.thomsonreuters.poc.search.es</groupId>
     <artifactId>es-poc</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>cg-poc-json-transformation</module>
         <module>cg-poc-search</module>
+        <module>cg-poc-json-transformation</module>
+        <module>cg-poc-indexer</module>
     </modules>
 
 
