@@ -27,19 +27,6 @@ public class ElasticsearchConnection {
     private Settings settings;
 
 
-    public static void main(String[] args) {
-        ElasticsearchConnection conn = new ElasticsearchConnection();
-        conn.createClient();
-        conn.createSettings();
-        conn.doGet(conn.getClusterName());
-        try {
-            conn.putIndex();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        conn.closeClient();
-    }
-
     public ElasticsearchConnection() {
 
     }

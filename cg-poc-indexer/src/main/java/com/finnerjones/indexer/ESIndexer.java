@@ -5,7 +5,6 @@ package com.finnerjones.indexer;
  */
 public class ESIndexer {
 
-    private static ElasticsearchConnection esConn;
 
     public ESIndexer() {
 
