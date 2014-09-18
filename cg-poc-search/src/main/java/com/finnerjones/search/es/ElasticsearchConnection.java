@@ -28,12 +28,14 @@ public class ElasticsearchConnection {
 
 
     public ElasticsearchConnection() {
-
+        createClient();
     }
 
     public void createClient() {
-        Node node = nodeBuilder().node();
-        client = node.client();
+        if (client == null) {
+            Node node = nodeBuilder().node();
+            client = node.client();
+        }
     }
 
     public void createSettings() {

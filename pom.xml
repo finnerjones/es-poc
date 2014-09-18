@@ -34,6 +34,7 @@
         <module>cg-poc-search</module>
         <module>cg-poc-json-transformation</module>
         <module>cg-poc-indexer</module>
+        <module>gc-poc-search-web</module>
     </modules>
 
     <dependencyManagement>
