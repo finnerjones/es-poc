@@ -23,7 +23,7 @@
             <artifactId>json</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.thomsonreuters.poc.search.es</groupId>
+            <groupId>com.finnerjones.poc.search.es</groupId>
             <artifactId>cg-poc-search</artifactId>
             <version>${parent.version}</version>
         </dependency>

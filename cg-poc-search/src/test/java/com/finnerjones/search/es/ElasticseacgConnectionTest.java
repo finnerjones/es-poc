@@ -32,7 +32,6 @@ public class ElasticseacgConnectionTest {
     private void putIndex() throws IOException {
         String source = createJSONDocument();
         conn.addDocumentAsJSON(source, "twitter", "tweet", 1L);
-        conn.addDocumentWithJsonBuilder(createMapDocument(), "twitter", "tweet", "1");
     }
 
 

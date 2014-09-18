@@ -58,22 +58,6 @@ public class ElasticsearchConnection {
         printResponse(response);
     }
 
-
-    public void addDocumentWithJsonBuilder(Object document, String indexName, String typeName, String version) throws IOException {
-        IndexResponse response = client.prepareIndex(indexName, typeName, version)
-                .setSource(jsonBuilder().
-                                startObject()
-                                .field("user", "kimchy")
-                                .field("postDate", new Date())
-                                .field("message", "trying out elasticsearch")
-                                .endObject()
-                )
-                .execute()
-                .actionGet();
-        printResponse(response);
-    }
-
-
     private void printResponse(IndexResponse response) {
         // Index name
         String index = response.getIndex();

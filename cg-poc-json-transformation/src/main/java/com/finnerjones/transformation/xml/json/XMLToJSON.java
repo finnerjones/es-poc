@@ -13,11 +13,13 @@ import java.util.Iterator;
 public class XMLToJSON {
 
     //private static final String DATA_PATH = "D:\\ClinicalGenomics\\test-data\\cortellis-fast\\si";
-    private static final String DATA_PATH = "cg-poc-json-transformation\\target\\classes\\contacts";
+    private static final String DATA_PATH = "cg-poc-json-transformation\\src\\main\\resources\\contacts";
+    private static final String OUTPUT_PATH = "data\\json\\";
     private static final String INDEX_NAME = "contacts";
     private static File dataFolder = new File(DATA_PATH);
     private static ElasticsearchConnection esConn;
-
+    private static String ID_KEY = "id";
+    private static String JSON_EXTENSION = ".json";
 
     public static void main(String[] args) {
         XMLToJSON xmlToJson = new XMLToJSON();
@@ -32,54 +34,59 @@ public class XMLToJSON {
     }
 
 
-    public void convertXMLFileToJSON(String fullFilename) {
-        try {
-            InputStream inNull = this.getClass().getClassLoader().getResourceAsStream(fullFilename);
-            InputStream in = new FileInputStream(new File(fullFilename));
-
-            StringBuilder builder = new StringBuilder();
-            int ptr = 0;
-            while ((ptr = in.read()) != -1) {
-                builder.append((char) ptr);
-            }
-
-            String xml = builder.toString();
-            JSONObject jsonObj = XML.toJSONObject(xml);
-            Iterator keyIter = jsonObj.keys();
-            String type = null;
-            while (keyIter.hasNext()) {
-                if (type == null) {
-                    type = (String) keyIter.next();
-                }
-            }
-
-            Long id = jsonObj.getJSONObject(type).getLong("id");
-
-            writeToDisk(jsonObj.toString().getBytes(), "");
-
-            esConn.createClient();
-            esConn.addDocumentAsJSON(jsonObj.toString(), INDEX_NAME, type, id);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public void findDataFiles(File fileOrFolder) {
         for (File aFile : fileOrFolder.listFiles()) {
             if (aFile.isDirectory()) {
                 findDataFiles(aFile);
             } else {
-                convertXMLFileToJSON(aFile.getAbsolutePath());
+                convertXmlToJsonAndWriteToDisk(aFile.getAbsolutePath());
             }
         }
+    }
 
+    public void convertXmlToJsonAndWriteToDisk(String fullFilename) {
+        try {
+            JSONObject jsonObj = translateXmlToJson(fullFilename);
+            String type = extractFirstKeyAsTypeFromJson(jsonObj);
+            Long documentId = jsonObj.getJSONObject(type).getLong(ID_KEY);
+            writeToDisk(jsonObj.toString().getBytes(), documentId + JSON_EXTENSION);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JSONObject translateXmlToJson(String fullFilename) throws IOException {
+        String xml = getXmlAsString(fullFilename);
+        return XML.toJSONObject(xml);
+    }
+
+    private String extractFirstKeyAsTypeFromJson(JSONObject jsonObj) {
+        Iterator keyIter = jsonObj.keys();
+        String type = null;
+        while (keyIter.hasNext()) {
+            if (type == null) {
+                type = (String) keyIter.next();
+            }
+        }
+        return type;
+    }
+
+    private String getXmlAsString(String fullFilename) throws IOException {
+        InputStream in = new FileInputStream(new File(fullFilename));
+
+        StringBuilder builder = new StringBuilder();
+        int ptr = 0;
+        while ((ptr = in.read()) != -1) {
+            builder.append((char) ptr);
+        }
+
+        return builder.toString();
     }
 
 
     public void writeToDisk(byte[] data, String filename) throws IOException {
-        FileOutputStream out = new FileOutputStream("the-file-name");
+        FileOutputStream out = new FileOutputStream(OUTPUT_PATH + filename);
         out.write(data);
         out.close();
     }
