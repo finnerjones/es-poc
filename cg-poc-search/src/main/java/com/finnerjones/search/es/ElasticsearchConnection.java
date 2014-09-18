@@ -51,31 +51,11 @@ public class ElasticsearchConnection {
         return client.get(req);
     }
 
-
-    public void addDocumentAsJSON(String document, String indexName, String typeName, Long id) {
-        IndexResponse response = client.prepareIndex(indexName, typeName, id.toString())
-                .setSource(document)
-                .execute()
-                .actionGet();
-        printResponse(response);
-    }
-
-    private void printResponse(IndexResponse response) {
-        // Index name
-        String index = response.getIndex();
-        // Type name
-        String type = response.getType();
-        // Document ID
-        String id = response.getId();
-        // Version
-        long version = response.getVersion();
-
-        System.out.println("Index: " + index + "\n" + "Type: " + type + "\n" + "ID: " + id + "\n" + "Version: " + version);
-    }
-
-
     public void closeClient() {
         client.close();
     }
 
+    public Client getClient() {
+        return client;
+    }
 }

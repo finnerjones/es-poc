@@ -15,5 +15,21 @@
     <artifactId>cg-poc-indexer</artifactId>
     <version>${parent.version}</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.finnerjones.poc.search.es</groupId>
+            <artifactId>cg-poc-search</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>
