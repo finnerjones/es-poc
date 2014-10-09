@@ -1,3 +1,4 @@
 cluster.name: finner-elasticsearch
 node.name: "test-ubuntu"
-path.data: ../../elasticsearch-local-data
+network.host: 127.0.0.1
+path.data: test-data/elasticsearch-test-data

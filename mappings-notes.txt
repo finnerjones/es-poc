@@ -1,0 +1,48 @@
+Mappings
+
+Specifying date formates:
+curl -XPUT localhost:9200/blog/ -d '{
+	"mappings": {
+		"article": {
+			"dynamic_date_formats": ["yyyy-MM-dd hh:mm"]
+		}
+	}
+}'	
+
+
+Turning off dynamic field type guessing
+curl -XPUT localhost:9200/blog/ -d '{
+	"mappings":{
+		"article": {
+			"dynamic": "false"
+		}
+	}
+}'
+
+
+Defining an index with mappings
+curl -XPUT localhost:9200/blog/ -d '{
+	"mappings":{
+		"article": {
+			"dynamic":"false",
+			"properties": {
+				"id": {"type":"string"},
+				"content": {"type": "string"},
+				"author": {"type":"string"}
+			}
+		}
+	}
+}'
+
+ONLY the fields 
+ID
+CONTENT
+AUTHOR
+will get indexed !!!!!!!!
+These mappings only apply to in the ARTICLE type in the index BLOG 
+
+
+
+
+
+

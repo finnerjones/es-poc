@@ -1,6 +1,9 @@
 package com.finnerjones.search.es;
 
 import junit.framework.Assert;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.search.SearchHits;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -21,5 +24,6 @@ public class ElasticseachConnectionTest {
         Assert.assertNotNull(conn.getClient());
 
     }
+
 
 }
